@@ -35,3 +35,91 @@ func main() {
 	// Execute the requested command
 	switch *command {
 	case "create":
+		// Calculate start time
+		startTime := time.Now().Add(*startIn)
+
+		// Create request
+		req := connect.NewRequest(&coupon.CreateCampaignRequest{
+			Name:         *campaignName,
+			TotalCoupons: int32(*totalCoupons),
+			StartTime:    timestamppb.New(startTime),
+		})
+
+		// Call API
+		resp, err := client.CreateCampaign(context.Background(), req)
+		if err != nil {
+			log.Fatalf("Error creating campaign: %v", err)
+		}
+
+		// Print response
+		fmt.Printf("Campaign created successfully!\n")
+		fmt.Printf("ID: %s\n", resp.Msg.Campaign.Id)
+		fmt.Printf("Name: %s\n", resp.Msg.Campaign.Name)
+		fmt.Printf("Total Coupons: %d\n", resp.Msg.Campaign.TotalCoupons)
+		fmt.Printf("Start Time: %s\n", resp.Msg.Campaign.StartTime.AsTime().Format(time.RFC3339))
+
+	case "get":
+		// Validate campaign ID
+		if *campaignID == "" {
+			log.Fatal("Campaign ID is required for get command")
+		}
+
+		// Create request
+		req := connect.NewRequest(&coupon.GetCampaignRequest{
+			CampaignId: *campaignID,
+		})
+
+		// Call API
+		resp, err := client.GetCampaign(context.Background(), req)
+		if err != nil {
+			log.Fatalf("Error getting campaign: %v", err)
+		}
+
+		// Print campaign details
+		fmt.Printf("Campaign Details:\n")
+		fmt.Printf("ID: %s\n", resp.Msg.Campaign.Id)
+		fmt.Printf("Name: %s\n", resp.Msg.Campaign.Name)
+		fmt.Printf("Total Coupons: %d\n", resp.Msg.Campaign.TotalCoupons)
+		fmt.Printf("Issued Coupons: %d\n", resp.Msg.Campaign.IssuedCoupons)
+		fmt.Printf("Start Time: %s\n", resp.Msg.Campaign.StartTime.AsTime().Format(time.RFC3339))
+
+		// Print coupons
+		fmt.Printf("\nIssued Coupons (%d):\n", len(resp.Msg.Coupons))
+		for i, c := range resp.Msg.Coupons {
+			fmt.Printf("%d. Code: %s, Issued At: %s\n",
+				i+1, c.Code, c.IssuedAt.AsTime().Format(time.RFC3339))
+		}
+
+	case "issue":
+		// Validate campaign ID
+		if *campaignID == "" {
+			log.Fatal("Campaign ID is required for issue command")
+		}
+
+		// Create request
+		req := connect.NewRequest(&coupon.IssueCouponRequest{
+			CampaignId: *campaignID,
+		})
+
+		// Call API
+		resp, err := client.IssueCoupon(context.Background(), req)
+		if err != nil {
+			log.Fatalf("Error issuing coupon: %v", err)
+		}
+
+		// Print result
+		if resp.Msg.Success {
+			fmt.Printf("Coupon issued successfully!\n")
+			fmt.Printf("Code: %s\n", resp.Msg.Coupon.Code)
+			fmt.Printf("Campaign ID: %s\n", resp.Msg.Coupon.CampaignId)
+			fmt.Printf("Issued At: %s\n", resp.Msg.Coupon.IssuedAt.AsTime().Format(time.RFC3339))
+		} else {
+			fmt.Printf("Failed to issue coupon: %s\n", resp.Msg.Error)
+		}
+
+	default:
+		fmt.Printf("Unknown command: %s\n", *command)
+		fmt.Println("Available commands: create, get, issue")
+		os.Exit(1)
+	}
+}

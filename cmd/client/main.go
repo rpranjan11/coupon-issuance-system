@@ -14,20 +14,21 @@ import (
 	"google.golang.org/protobuf/types/known/timestamppb"
 
 	coupon "github.com/rpranjan11/coupon-issuance-system/api/coupon"
+	"github.com/rpranjan11/coupon-issuance-system/api/coupon/couponconnect"
 )
 
 func main() {
 	// Parse command-line flags
 	serverAddr := flag.String("server", "http://localhost:8080", "server address")
-	command := flag.String("command", "issue", "command to run: create, get, or issue")
-	campaignID := flag.String("campaign", "", "campaign ID for get and issue commands")
-	campaignName := flag.String("name", "Test Campaign", "campaign name for create command")
+	command := flag.String("command", "issue", "command to run: create, get, issue, or delete")
+	campaignID := flag.String("campaign", "", "campaign ID for get, issue, and delete commands")
+	campaignName := flag.String("name", "Test Campaign", "campaign name for create and delete commands")
 	totalCoupons := flag.Int("total", 10, "total coupons for create command")
 	startIn := flag.Duration("start-in", 0, "start time in duration from now for create command")
 	flag.Parse()
 
 	// Create HTTP client
-	client := coupon.NewCouponServiceClient(
+	client := couponconnect.NewCouponServiceClient(
 		http.DefaultClient,
 		*serverAddr,
 	)
@@ -117,9 +118,29 @@ func main() {
 			fmt.Printf("Failed to issue coupon: %s\n", resp.Msg.Error)
 		}
 
+	case "delete":
+		// Create request
+		req := connect.NewRequest(&coupon.DeleteCampaignRequest{
+			CampaignId:   *campaignID,
+			CampaignName: *campaignName,
+		})
+
+		// Call API
+		resp, err := client.DeleteCampaign(context.Background(), req)
+		if err != nil {
+			log.Fatalf("Error deleting campaign: %v", err)
+		}
+
+		// Print result
+		if resp.Msg.Success {
+			fmt.Printf("Success: %s\n", resp.Msg.Message)
+		} else {
+			fmt.Printf("Failed: %s\n", resp.Msg.Message)
+		}
+
 	default:
 		fmt.Printf("Unknown command: %s\n", *command)
-		fmt.Println("Available commands: create, get, issue")
+		fmt.Println("Available commands: create, get, issue, delete")
 		os.Exit(1)
 	}
 }

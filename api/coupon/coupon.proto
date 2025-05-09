@@ -17,6 +17,9 @@ service CouponService {
 
   // IssueCoupon requests coupon issuance on a specific campaign
   rpc IssueCoupon(IssueCouponRequest) returns (IssueCouponResponse) {}
+
+  // DeleteCampaign deletes a campaign by ID or name
+  rpc DeleteCampaign(DeleteCampaignRequest) returns (DeleteCampaignResponse) {}
 }
 
 // Campaign represents a coupon campaign
@@ -69,4 +72,16 @@ message IssueCouponResponse {
   bool success = 1;
   Coupon coupon = 2;
   string error = 3;
+}
+
+// DeleteCampaignRequest is the request for deleting a campaign
+message DeleteCampaignRequest {
+  string campaign_id = 1;
+  string campaign_name = 2;
+}
+
+// DeleteCampaignResponse is the response for deleting a campaign
+message DeleteCampaignResponse {
+  bool success = 1;
+  string message = 2;
 }

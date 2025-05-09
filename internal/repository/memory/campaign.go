@@ -101,3 +101,32 @@ func (r *CampaignRepository) FindByName(ctx context.Context, name string) (*doma
 
 	return nil, ErrCampaignNotFound
 }
+
+// DeleteByID deletes a campaign by ID
+func (r *CampaignRepository) DeleteByID(ctx context.Context, id string) (bool, error) {
+	r.mutex.Lock()
+	defer r.mutex.Unlock()
+
+	_, exists := r.campaigns[id]
+	if !exists {
+		return false, nil
+	}
+
+	delete(r.campaigns, id)
+	return true, nil
+}
+
+// DeleteByName deletes a campaign by name
+func (r *CampaignRepository) DeleteByName(ctx context.Context, name string) (bool, error) {
+	r.mutex.Lock()
+	defer r.mutex.Unlock()
+
+	for id, campaign := range r.campaigns {
+		if campaign.Name == name {
+			delete(r.campaigns, id)
+			return true, nil
+		}
+	}
+
+	return false, nil
+}

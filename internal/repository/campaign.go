@@ -24,4 +24,10 @@ type CampaignRepository interface {
 
 	// FindByName finds a campaign by its name
 	FindByName(ctx context.Context, name string) (*domain.Campaign, error)
+
+	// DeleteByID deletes a campaign by ID
+	DeleteByID(ctx context.Context, id string) (bool, error)
+
+	// DeleteByName deletes a campaign by name
+	DeleteByName(ctx context.Context, name string) (bool, error)
 }

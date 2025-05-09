@@ -151,3 +151,33 @@ func (s *CouponServiceServer) IssueCoupon(
 		Coupon:  couponProto,
 	}), nil
 }
+
+// DeleteCampaign deletes a campaign by ID or name
+func (s *CouponServiceServer) DeleteCampaign(
+	ctx context.Context,
+	req *connect.Request[coupon.DeleteCampaignRequest],
+) (*connect.Response[coupon.DeleteCampaignResponse], error) {
+	// Extract request parameters
+	campaignID := req.Msg.CampaignId
+	campaignName := req.Msg.CampaignName
+
+	// Validate request
+	if campaignID == "" && campaignName == "" {
+		return nil, connect.NewError(connect.CodeInvalidArgument, errors.New("campaign ID or name is required"))
+	}
+
+	// Delete campaign
+	success, message, err := s.campaignService.DeleteCampaign(ctx, campaignID, campaignName)
+	if err != nil {
+		if errors.Is(err, service.ErrInvalidRequest) {
+			return nil, connect.NewError(connect.CodeInvalidArgument, err)
+		}
+		return nil, connect.NewError(connect.CodeInternal, err)
+	}
+
+	// Return response
+	return connect.NewResponse(&coupon.DeleteCampaignResponse{
+		Success: success,
+		Message: message,
+	}), nil
+}

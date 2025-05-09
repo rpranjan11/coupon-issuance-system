@@ -125,3 +125,36 @@ func (s *CampaignService) IssueCoupon(ctx context.Context, campaignID string) (*
 
 	return coupon, nil
 }
+
+// DeleteCampaign deletes a campaign by ID or name
+func (s *CampaignService) DeleteCampaign(ctx context.Context, id, name string) (bool, string, error) {
+	// If both ID and name are empty, return an error
+	if id == "" && name == "" {
+		return false, "Campaign ID or name is required", ErrInvalidRequest
+	}
+
+	// Try to delete by ID first if provided
+	if id != "" {
+		deleted, err := s.campaignRepo.DeleteByID(ctx, id)
+		if err != nil {
+			return false, "Failed to delete campaign", err
+		}
+		if deleted {
+			return true, "Campaign deleted successfully", nil
+		}
+	}
+
+	// If ID wasn't provided or deletion by ID failed, try by name
+	if name != "" {
+		deleted, err := s.campaignRepo.DeleteByName(ctx, name)
+		if err != nil {
+			return false, "Failed to delete campaign", err
+		}
+		if deleted {
+			return true, "Campaign deleted successfully", nil
+		}
+	}
+
+	// If we get here, the campaign wasn't found
+	return false, "No such campaign exists", nil
+}

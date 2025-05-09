@@ -9,11 +9,10 @@ package couponconnect
 import (
 	context "context"
 	errors "errors"
-	http "net/http"
-	strings "strings"
-
 	connect_go "github.com/bufbuild/connect-go"
 	coupon "github.com/rpranjan11/coupon-issuance-system/api/coupon"
+	http "net/http"
+	strings "strings"
 )
 
 // This is a compile-time assertion to ensure that this generated file and the connect package are
@@ -45,6 +44,9 @@ const (
 	// CouponServiceIssueCouponProcedure is the fully-qualified name of the CouponService's IssueCoupon
 	// RPC.
 	CouponServiceIssueCouponProcedure = "/coupon.v1.CouponService/IssueCoupon"
+	// CouponServiceDeleteCampaignProcedure is the fully-qualified name of the CouponService's
+	// DeleteCampaign RPC.
+	CouponServiceDeleteCampaignProcedure = "/coupon.v1.CouponService/DeleteCampaign"
 )
 
 // CouponServiceClient is a client for the coupon.v1.CouponService service.
@@ -55,6 +57,8 @@ type CouponServiceClient interface {
 	GetCampaign(context.Context, *connect_go.Request[coupon.GetCampaignRequest]) (*connect_go.Response[coupon.GetCampaignResponse], error)
 	// IssueCoupon requests coupon issuance on a specific campaign
 	IssueCoupon(context.Context, *connect_go.Request[coupon.IssueCouponRequest]) (*connect_go.Response[coupon.IssueCouponResponse], error)
+	// DeleteCampaign deletes a campaign by ID or name
+	DeleteCampaign(context.Context, *connect_go.Request[coupon.DeleteCampaignRequest]) (*connect_go.Response[coupon.DeleteCampaignResponse], error)
 }
 
 // NewCouponServiceClient constructs a client for the coupon.v1.CouponService service. By default,
@@ -82,6 +86,11 @@ func NewCouponServiceClient(httpClient connect_go.HTTPClient, baseURL string, op
 			baseURL+CouponServiceIssueCouponProcedure,
 			opts...,
 		),
+		deleteCampaign: connect_go.NewClient[coupon.DeleteCampaignRequest, coupon.DeleteCampaignResponse](
+			httpClient,
+			baseURL+CouponServiceDeleteCampaignProcedure,
+			opts...,
+		),
 	}
 }
 
@@ -90,6 +99,7 @@ type couponServiceClient struct {
 	createCampaign *connect_go.Client[coupon.CreateCampaignRequest, coupon.CreateCampaignResponse]
 	getCampaign    *connect_go.Client[coupon.GetCampaignRequest, coupon.GetCampaignResponse]
 	issueCoupon    *connect_go.Client[coupon.IssueCouponRequest, coupon.IssueCouponResponse]
+	deleteCampaign *connect_go.Client[coupon.DeleteCampaignRequest, coupon.DeleteCampaignResponse]
 }
 
 // CreateCampaign calls coupon.v1.CouponService.CreateCampaign.
@@ -107,6 +117,11 @@ func (c *couponServiceClient) IssueCoupon(ctx context.Context, req *connect_go.R
 	return c.issueCoupon.CallUnary(ctx, req)
 }
 
+// DeleteCampaign calls coupon.v1.CouponService.DeleteCampaign.
+func (c *couponServiceClient) DeleteCampaign(ctx context.Context, req *connect_go.Request[coupon.DeleteCampaignRequest]) (*connect_go.Response[coupon.DeleteCampaignResponse], error) {
+	return c.deleteCampaign.CallUnary(ctx, req)
+}
+
 // CouponServiceHandler is an implementation of the coupon.v1.CouponService service.
 type CouponServiceHandler interface {
 	// CreateCampaign creates a new coupon campaign
@@ -115,6 +130,8 @@ type CouponServiceHandler interface {
 	GetCampaign(context.Context, *connect_go.Request[coupon.GetCampaignRequest]) (*connect_go.Response[coupon.GetCampaignResponse], error)
 	// IssueCoupon requests coupon issuance on a specific campaign
 	IssueCoupon(context.Context, *connect_go.Request[coupon.IssueCouponRequest]) (*connect_go.Response[coupon.IssueCouponResponse], error)
+	// DeleteCampaign deletes a campaign by ID or name
+	DeleteCampaign(context.Context, *connect_go.Request[coupon.DeleteCampaignRequest]) (*connect_go.Response[coupon.DeleteCampaignResponse], error)
 }
 
 // NewCouponServiceHandler builds an HTTP handler from the service implementation. It returns the
@@ -138,6 +155,11 @@ func NewCouponServiceHandler(svc CouponServiceHandler, opts ...connect_go.Handle
 		svc.IssueCoupon,
 		opts...,
 	)
+	couponServiceDeleteCampaignHandler := connect_go.NewUnaryHandler(
+		CouponServiceDeleteCampaignProcedure,
+		svc.DeleteCampaign,
+		opts...,
+	)
 	return "/coupon.v1.CouponService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case CouponServiceCreateCampaignProcedure:
@@ -146,6 +168,8 @@ func NewCouponServiceHandler(svc CouponServiceHandler, opts ...connect_go.Handle
 			couponServiceGetCampaignHandler.ServeHTTP(w, r)
 		case CouponServiceIssueCouponProcedure:
 			couponServiceIssueCouponHandler.ServeHTTP(w, r)
+		case CouponServiceDeleteCampaignProcedure:
+			couponServiceDeleteCampaignHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -165,4 +189,8 @@ func (UnimplementedCouponServiceHandler) GetCampaign(context.Context, *connect_g
 
 func (UnimplementedCouponServiceHandler) IssueCoupon(context.Context, *connect_go.Request[coupon.IssueCouponRequest]) (*connect_go.Response[coupon.IssueCouponResponse], error) {
 	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("coupon.v1.CouponService.IssueCoupon is not implemented"))
+}
+
+func (UnimplementedCouponServiceHandler) DeleteCampaign(context.Context, *connect_go.Request[coupon.DeleteCampaignRequest]) (*connect_go.Response[coupon.DeleteCampaignResponse], error) {
+	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("coupon.v1.CouponService.DeleteCampaign is not implemented"))
 }

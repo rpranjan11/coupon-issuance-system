@@ -9,13 +9,12 @@
 package coupon
 
 import (
-	reflect "reflect"
-	sync "sync"
-	unsafe "unsafe"
-
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
+	reflect "reflect"
+	sync "sync"
+	unsafe "unsafe"
 )
 
 const (
@@ -481,6 +480,112 @@ func (x *IssueCouponResponse) GetError() string {
 	return ""
 }
 
+// DeleteCampaignRequest is the request for deleting a campaign
+type DeleteCampaignRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	CampaignId    string                 `protobuf:"bytes,1,opt,name=campaign_id,json=campaignId,proto3" json:"campaign_id,omitempty"`
+	CampaignName  string                 `protobuf:"bytes,2,opt,name=campaign_name,json=campaignName,proto3" json:"campaign_name,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DeleteCampaignRequest) Reset() {
+	*x = DeleteCampaignRequest{}
+	mi := &file_api_coupon_coupon_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeleteCampaignRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteCampaignRequest) ProtoMessage() {}
+
+func (x *DeleteCampaignRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_api_coupon_coupon_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteCampaignRequest.ProtoReflect.Descriptor instead.
+func (*DeleteCampaignRequest) Descriptor() ([]byte, []int) {
+	return file_api_coupon_coupon_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *DeleteCampaignRequest) GetCampaignId() string {
+	if x != nil {
+		return x.CampaignId
+	}
+	return ""
+}
+
+func (x *DeleteCampaignRequest) GetCampaignName() string {
+	if x != nil {
+		return x.CampaignName
+	}
+	return ""
+}
+
+// DeleteCampaignResponse is the response for deleting a campaign
+type DeleteCampaignResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Message       string                 `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DeleteCampaignResponse) Reset() {
+	*x = DeleteCampaignResponse{}
+	mi := &file_api_coupon_coupon_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeleteCampaignResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteCampaignResponse) ProtoMessage() {}
+
+func (x *DeleteCampaignResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_api_coupon_coupon_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteCampaignResponse.ProtoReflect.Descriptor instead.
+func (*DeleteCampaignResponse) Descriptor() ([]byte, []int) {
+	return file_api_coupon_coupon_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *DeleteCampaignResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *DeleteCampaignResponse) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
 var File_api_coupon_coupon_proto protoreflect.FileDescriptor
 
 const file_api_coupon_coupon_proto_rawDesc = "" +
@@ -519,11 +624,19 @@ const file_api_coupon_coupon_proto_rawDesc = "" +
 	"\x13IssueCouponResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12)\n" +
 	"\x06coupon\x18\x02 \x01(\v2\x11.coupon.v1.CouponR\x06coupon\x12\x14\n" +
-	"\x05error\x18\x03 \x01(\tR\x05error2\x88\x02\n" +
+	"\x05error\x18\x03 \x01(\tR\x05error\"]\n" +
+	"\x15DeleteCampaignRequest\x12\x1f\n" +
+	"\vcampaign_id\x18\x01 \x01(\tR\n" +
+	"campaignId\x12#\n" +
+	"\rcampaign_name\x18\x02 \x01(\tR\fcampaignName\"L\n" +
+	"\x16DeleteCampaignResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage2\xe1\x02\n" +
 	"\rCouponService\x12W\n" +
 	"\x0eCreateCampaign\x12 .coupon.v1.CreateCampaignRequest\x1a!.coupon.v1.CreateCampaignResponse\"\x00\x12N\n" +
 	"\vGetCampaign\x12\x1d.coupon.v1.GetCampaignRequest\x1a\x1e.coupon.v1.GetCampaignResponse\"\x00\x12N\n" +
-	"\vIssueCoupon\x12\x1d.coupon.v1.IssueCouponRequest\x1a\x1e.coupon.v1.IssueCouponResponse\"\x00B@Z>github.com/rpranjan11/coupon-issuance-system/api/coupon;couponb\x06proto3"
+	"\vIssueCoupon\x12\x1d.coupon.v1.IssueCouponRequest\x1a\x1e.coupon.v1.IssueCouponResponse\"\x00\x12W\n" +
+	"\x0eDeleteCampaign\x12 .coupon.v1.DeleteCampaignRequest\x1a!.coupon.v1.DeleteCampaignResponse\"\x00B@Z>github.com/rpranjan11/coupon-issuance-system/api/coupon;couponb\x06proto3"
 
 var (
 	file_api_coupon_coupon_proto_rawDescOnce sync.Once
@@ -537,7 +650,7 @@ func file_api_coupon_coupon_proto_rawDescGZIP() []byte {
 	return file_api_coupon_coupon_proto_rawDescData
 }
 
-var file_api_coupon_coupon_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
+var file_api_coupon_coupon_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
 var file_api_coupon_coupon_proto_goTypes = []any{
 	(*Campaign)(nil),               // 0: coupon.v1.Campaign
 	(*Coupon)(nil),                 // 1: coupon.v1.Coupon
@@ -547,13 +660,15 @@ var file_api_coupon_coupon_proto_goTypes = []any{
 	(*GetCampaignResponse)(nil),    // 5: coupon.v1.GetCampaignResponse
 	(*IssueCouponRequest)(nil),     // 6: coupon.v1.IssueCouponRequest
 	(*IssueCouponResponse)(nil),    // 7: coupon.v1.IssueCouponResponse
-	(*timestamppb.Timestamp)(nil),  // 8: google.protobuf.Timestamp
+	(*DeleteCampaignRequest)(nil),  // 8: coupon.v1.DeleteCampaignRequest
+	(*DeleteCampaignResponse)(nil), // 9: coupon.v1.DeleteCampaignResponse
+	(*timestamppb.Timestamp)(nil),  // 10: google.protobuf.Timestamp
 }
 var file_api_coupon_coupon_proto_depIdxs = []int32{
-	8,  // 0: coupon.v1.Campaign.start_time:type_name -> google.protobuf.Timestamp
-	8,  // 1: coupon.v1.Campaign.created_at:type_name -> google.protobuf.Timestamp
-	8,  // 2: coupon.v1.Coupon.issued_at:type_name -> google.protobuf.Timestamp
-	8,  // 3: coupon.v1.CreateCampaignRequest.start_time:type_name -> google.protobuf.Timestamp
+	10, // 0: coupon.v1.Campaign.start_time:type_name -> google.protobuf.Timestamp
+	10, // 1: coupon.v1.Campaign.created_at:type_name -> google.protobuf.Timestamp
+	10, // 2: coupon.v1.Coupon.issued_at:type_name -> google.protobuf.Timestamp
+	10, // 3: coupon.v1.CreateCampaignRequest.start_time:type_name -> google.protobuf.Timestamp
 	0,  // 4: coupon.v1.CreateCampaignResponse.campaign:type_name -> coupon.v1.Campaign
 	0,  // 5: coupon.v1.GetCampaignResponse.campaign:type_name -> coupon.v1.Campaign
 	1,  // 6: coupon.v1.GetCampaignResponse.coupons:type_name -> coupon.v1.Coupon
@@ -561,11 +676,13 @@ var file_api_coupon_coupon_proto_depIdxs = []int32{
 	2,  // 8: coupon.v1.CouponService.CreateCampaign:input_type -> coupon.v1.CreateCampaignRequest
 	4,  // 9: coupon.v1.CouponService.GetCampaign:input_type -> coupon.v1.GetCampaignRequest
 	6,  // 10: coupon.v1.CouponService.IssueCoupon:input_type -> coupon.v1.IssueCouponRequest
-	3,  // 11: coupon.v1.CouponService.CreateCampaign:output_type -> coupon.v1.CreateCampaignResponse
-	5,  // 12: coupon.v1.CouponService.GetCampaign:output_type -> coupon.v1.GetCampaignResponse
-	7,  // 13: coupon.v1.CouponService.IssueCoupon:output_type -> coupon.v1.IssueCouponResponse
-	11, // [11:14] is the sub-list for method output_type
-	8,  // [8:11] is the sub-list for method input_type
+	8,  // 11: coupon.v1.CouponService.DeleteCampaign:input_type -> coupon.v1.DeleteCampaignRequest
+	3,  // 12: coupon.v1.CouponService.CreateCampaign:output_type -> coupon.v1.CreateCampaignResponse
+	5,  // 13: coupon.v1.CouponService.GetCampaign:output_type -> coupon.v1.GetCampaignResponse
+	7,  // 14: coupon.v1.CouponService.IssueCoupon:output_type -> coupon.v1.IssueCouponResponse
+	9,  // 15: coupon.v1.CouponService.DeleteCampaign:output_type -> coupon.v1.DeleteCampaignResponse
+	12, // [12:16] is the sub-list for method output_type
+	8,  // [8:12] is the sub-list for method input_type
 	8,  // [8:8] is the sub-list for extension type_name
 	8,  // [8:8] is the sub-list for extension extendee
 	0,  // [0:8] is the sub-list for field type_name
@@ -582,7 +699,7 @@ func file_api_coupon_coupon_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_api_coupon_coupon_proto_rawDesc), len(file_api_coupon_coupon_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   8,
+			NumMessages:   10,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

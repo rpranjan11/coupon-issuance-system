@@ -21,4 +21,7 @@ type CampaignRepository interface {
 	// AtomicIncrementIssued atomically increments the issued_coupons counter
 	// Returns true if increment was successful, false if total was reached
 	AtomicIncrementIssued(ctx context.Context, campaignID string) (bool, error)
+
+	// FindByName finds a campaign by its name
+	FindByName(ctx context.Context, name string) (*domain.Campaign, error)
 }

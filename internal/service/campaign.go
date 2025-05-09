@@ -17,6 +17,7 @@ var (
 	ErrCampaignNotFound   = errors.New("campaign not found")
 	ErrCampaignNotStarted = errors.New("campaign has not started yet")
 	ErrNoMoreCoupons      = errors.New("no more coupons available")
+	ErrDuplicateCampaign  = errors.New("a campaign with this name already exists")
 )
 
 // CampaignService handles campaign-related business logic
@@ -40,6 +41,12 @@ func (s *CampaignService) CreateCampaign(ctx context.Context, name string, total
 		return nil, ErrInvalidRequest
 	}
 
+	// Check if a campaign with the same name already exists
+	existingCampaign, err := s.campaignRepo.FindByName(ctx, name)
+	if err == nil && existingCampaign != nil {
+		return nil, ErrDuplicateCampaign
+	}
+
 	// Create campaign
 	campaign := &domain.Campaign{
 		ID:            uuid.New().String(),
@@ -51,7 +58,7 @@ func (s *CampaignService) CreateCampaign(ctx context.Context, name string, total
 	}
 
 	// Save campaign
-	err := s.campaignRepo.Create(ctx, campaign)
+	err = s.campaignRepo.Create(ctx, campaign)
 	if err != nil {
 		return nil, err
 	}

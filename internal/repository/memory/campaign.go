@@ -87,3 +87,17 @@ func (r *CampaignRepository) AtomicIncrementIssued(ctx context.Context, campaign
 	campaign.IssuedCoupons++
 	return true, nil
 }
+
+// FindByName finds a campaign by its name
+func (r *CampaignRepository) FindByName(ctx context.Context, name string) (*domain.Campaign, error) {
+	r.mutex.RLock()
+	defer r.mutex.RUnlock()
+
+	for _, campaign := range r.campaigns {
+		if campaign.Name == name {
+			return campaign, nil
+		}
+	}
+
+	return nil, ErrCampaignNotFound
+}

@@ -42,6 +42,10 @@ func (s *CouponServiceServer) CreateCampaign(
 	// Create campaign
 	campaign, err := s.campaignService.CreateCampaign(ctx, req.Msg.Name, int(req.Msg.TotalCoupons), startTime)
 	if err != nil {
+		if errors.Is(err, service.ErrDuplicateCampaign) {
+			return nil, connect.NewError(connect.CodeAlreadyExists,
+				errors.New("a campaign with this name already exists"))
+		}
 		return nil, connect.NewError(connect.CodeInternal, err)
 	}
 

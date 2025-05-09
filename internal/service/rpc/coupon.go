@@ -4,13 +4,13 @@ package rpc
 import (
 	"context"
 	"errors"
-	"time"
+	// Remove unused time import
 
 	"github.com/bufbuild/connect-go"
 	"google.golang.org/protobuf/types/known/timestamppb"
 
 	coupon "github.com/rpranjan11/coupon-issuance-system/api/coupon"
-	"github.com/rpranjan11/coupon-issuance-system/internal/domain"
+	// "github.com/rpranjan11/coupon-issuance-system/internal/domain" - remove if unused
 	"github.com/rpranjan11/coupon-issuance-system/internal/service"
 )
 
@@ -90,11 +90,11 @@ func (s *CouponServiceServer) GetCampaign(
 	}
 
 	couponProtos := make([]*coupon.Coupon, len(coupons))
-	for i, coupon := range coupons {
+	for i, c := range coupons {
 		couponProtos[i] = &coupon.Coupon{
-			Code:       coupon.Code,
-			CampaignId: coupon.CampaignID,
-			IssuedAt:   timestamppb.New(coupon.IssuedAt),
+			Code:       c.Code,
+			CampaignId: c.CampaignID,
+			IssuedAt:   timestamppb.New(c.IssuedAt),
 		}
 	}
 
@@ -115,7 +115,7 @@ func (s *CouponServiceServer) IssueCoupon(
 	}
 
 	// Issue coupon
-	coupon, err := s.campaignService.IssueCoupon(ctx, req.Msg.CampaignId)
+	c, err := s.campaignService.IssueCoupon(ctx, req.Msg.CampaignId)
 	if err != nil {
 		switch {
 		case errors.Is(err, service.ErrCampaignNotFound):
@@ -137,9 +137,9 @@ func (s *CouponServiceServer) IssueCoupon(
 
 	// Convert domain model to proto model
 	couponProto := &coupon.Coupon{
-		Code:       coupon.Code,
-		CampaignId: coupon.CampaignID,
-		IssuedAt:   timestamppb.New(coupon.IssuedAt),
+		Code:       c.Code,
+		CampaignId: c.CampaignID,
+		IssuedAt:   timestamppb.New(c.IssuedAt),
 	}
 
 	return connect.NewResponse(&coupon.IssueCouponResponse{

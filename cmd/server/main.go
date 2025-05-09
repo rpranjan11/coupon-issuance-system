@@ -4,19 +4,19 @@ package main
 import (
 	"context"
 	"fmt"
-	"log"
+	// Remove unused log import
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
 
-	"github.com/bufbuild/connect-go"
+	// Remove unused connect-go import
 	"github.com/rs/zerolog"
 	"golang.org/x/net/http2"
 	"golang.org/x/net/http2/h2c"
 
-	coupon "github.com/rpranjan11/coupon-issuance-system/api/coupon"
+	"github.com/rpranjan11/coupon-issuance-system/api/coupon/couponconnect"
 	"github.com/rpranjan11/coupon-issuance-system/internal/repository/memory"
 	"github.com/rpranjan11/coupon-issuance-system/internal/service"
 	"github.com/rpranjan11/coupon-issuance-system/internal/service/rpc"
@@ -41,7 +41,8 @@ func main() {
 	couponServer := rpc.NewCouponServiceServer(campaignService)
 
 	// Set up Connect path
-	path, handler := coupon.NewCouponServiceHandler(couponServer)
+	// Change this line to use the correct function from couponconnect
+	path, handler := couponconnect.NewCouponServiceHandler(couponServer)
 
 	// Set up middleware for logging and error handling
 	var loggingHandler http.Handler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

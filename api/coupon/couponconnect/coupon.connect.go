@@ -9,10 +9,11 @@ package couponconnect
 import (
 	context "context"
 	errors "errors"
-	connect_go "github.com/bufbuild/connect-go"
-	coupon "github.com/rpranjan11/coupon-issuance-system/api/coupon"
 	http "net/http"
 	strings "strings"
+
+	connect_go "github.com/bufbuild/connect-go"
+	coupon "github.com/rpranjan11/coupon-issuance-system/api/coupon"
 )
 
 // This is a compile-time assertion to ensure that this generated file and the connect package are

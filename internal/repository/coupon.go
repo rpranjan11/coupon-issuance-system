@@ -14,4 +14,7 @@ type CouponRepository interface {
 
 	// GetByCampaign retrieves all coupons for a campaign
 	GetByCampaign(ctx context.Context, campaignID string) ([]*domain.Coupon, error)
+
+	// DeleteByCampaignID deletes all coupons for a specific campaign
+	DeleteByCampaignID(ctx context.Context, campaignID string) error
 }

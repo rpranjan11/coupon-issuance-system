@@ -51,3 +51,13 @@ func (r *CouponRepository) GetByCampaign(ctx context.Context, campaignID string)
 
 	return result, nil
 }
+
+// DeleteByCampaignID deletes all coupons for a specific campaign
+func (r *CouponRepository) DeleteByCampaignID(ctx context.Context, campaignID string) error {
+	r.mutex.Lock()
+	defer r.mutex.Unlock()
+
+	// Simply remove the entire slice of coupons for this campaign
+	delete(r.coupons, campaignID)
+	return nil
+}

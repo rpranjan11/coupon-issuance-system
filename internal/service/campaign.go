@@ -133,26 +133,51 @@ func (s *CampaignService) DeleteCampaign(ctx context.Context, id, name string) (
 		return false, "Campaign ID or name is required", ErrInvalidRequest
 	}
 
+	var campaignID string
+	var campaignDeleted bool
+	var err error
+
 	// Try to delete by ID first if provided
 	if id != "" {
-		deleted, err := s.campaignRepo.DeleteByID(ctx, id)
+		// Store the ID before deleting (we'll need it to delete coupons)
+		campaignID = id
+
+		// Delete the campaign
+		campaignDeleted, err = s.campaignRepo.DeleteByID(ctx, id)
 		if err != nil {
 			return false, "Failed to delete campaign", err
-		}
-		if deleted {
-			return true, "Campaign deleted successfully", nil
 		}
 	}
 
 	// If ID wasn't provided or deletion by ID failed, try by name
-	if name != "" {
-		deleted, err := s.campaignRepo.DeleteByName(ctx, name)
+	if !campaignDeleted && name != "" {
+		// First, find the campaign to get its ID
+		campaign, err := s.campaignRepo.FindByName(ctx, name)
 		if err != nil {
-			return false, "Failed to delete campaign", err
+			return false, "Failed to find campaign by name", err
 		}
-		if deleted {
-			return true, "Campaign deleted successfully", nil
+
+		if campaign != nil {
+			// Store the ID before deleting
+			campaignID = campaign.ID
+
+			// Delete the campaign
+			campaignDeleted, err = s.campaignRepo.DeleteByName(ctx, name)
+			if err != nil {
+				return false, "Failed to delete campaign", err
+			}
 		}
+	}
+
+	// If a campaign was deleted, also delete its coupons
+	if campaignDeleted && campaignID != "" {
+		err = s.couponRepo.DeleteByCampaignID(ctx, campaignID)
+		if err != nil {
+			// This is a partial failure - the campaign was deleted but coupons weren't
+			// In a production system, this should be handled with transactions
+			return true, "Campaign deleted but failed to delete associated coupons", err
+		}
+		return true, "Campaign and associated coupons deleted successfully", nil
 	}
 
 	// If we get here, the campaign wasn't found

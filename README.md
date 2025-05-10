@@ -11,10 +11,11 @@ This system enables creating coupon campaigns with configurable parameters. Each
 - Create campaigns with a specified number of coupons and start time
 - Get campaign information including all issued coupon codes
 - Issue coupons on a first-come-first-served basis
-- Concurrent request handling with data consistency
+- Delete campaigns and all associated coupons
+- Request validation for All APIs
+- Generate only the specified number of coupons
 - Unique coupon code generation with Korean characters and numbers
-- Request validation for All APIs 
-- 
+- Concurrent request handling with data consistency
 
 ## Prerequisites
 

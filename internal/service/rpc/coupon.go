@@ -4,6 +4,7 @@ package rpc
 import (
 	"context"
 	"errors"
+
 	// Remove unused time import
 
 	"github.com/bufbuild/connect-go"

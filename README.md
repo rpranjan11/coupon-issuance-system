@@ -13,6 +13,8 @@ This system enables creating coupon campaigns with configurable parameters. Each
 - Issue coupons on a first-come-first-served basis
 - Concurrent request handling with data consistency
 - Unique coupon code generation with Korean characters and numbers
+- Request validation for All APIs 
+- 
 
 ## Prerequisites
 
@@ -64,13 +66,13 @@ go build -o server ./cmd/server
 
 ## API Endpoints
 ### 1. Create Campaign
-- **Endpoint**: `/campaigns`
+- **Endpoint**: `/CreateCampaign`
 - **Method**: `POST`
 - **Request Body**:
 ```json
 {
   "name": "string",
-  "start_time": "2023-10-01T00:00:00Z",
+  "start_time": "2025-05-11T00:00:00Z",
   "coupon_count": 100
 }
 ```
@@ -80,15 +82,14 @@ go build -o server ./cmd/server
 {
   "id": "string",
   "name": "string",
-  "start_time": "2023-10-01T00:00:00Z",
-  "coupon_count": 100,
-  "issued_count": 0,
-  "coupon_codes": []
+  "totalCoupons": 100,
+  "startTime": "2025-05-11T00:00:00Z",
+  "createdAt": "2025-05-11T16:23:13.093881Z"
 }
 ```
 
 ### 2. Issue Coupon
-- **Endpoint**: `/IssueCoupon/`
+- **Endpoint**: `/IssueCoupon`
 - **Method**: `POST`
 - **Request Body**:
 ```json
@@ -99,25 +100,60 @@ go build -o server ./cmd/server
 - **Response**:
 ```json
 {
-  "coupon_code": "string"
+  "success": true,
+  "coupon": {
+    "code": "string",
+    "campaignId": "string",
+    "issuedAt": "2025-05-10T16:25:07.607675Z"
+  }
 }
 ```
 
-### 3. Get All Campaigns
-- **Endpoint**: `/campaigns`
+### 3. Get Campaign Details
+- **Endpoint**: `/GetCampaign/`
 - **Method**: `POST`
+- **Request Body**:
+```json
+{
+  "campaign_id": "string"
+}
+```
 - **Response**:
 ```json
-[
-  {
+{
+  "campaign": {
     "id": "string",
     "name": "string",
-    "start_time": "2023-10-01T00:00:00Z",
-    "coupon_count": 100,
-    "issued_count": 0,
-    "coupon_codes": []
-  }
-]
+    "totalCoupons": 100,
+    "issuedCoupons": 1,
+    "startTime": "2025-05-10T00:00:00Z",
+    "createdAt": "2025-05-10T16:23:56.405350Z"
+  },
+  "coupons": [
+    {
+      "code": "string",
+      "campaignId": "string",
+      "issuedAt": "2025-05-10T16:25:07.607675Z"
+    }
+  ]
+}
+```
+
+### 4. Delete Campaign
+- **Endpoint**: `/DeleteCampaign`
+- **Method**: `POST`
+- **Request Body**:
+```json
+{
+  "campaign_id": "string"
+}
+```
+- **Response**:
+```json
+{
+  "success": true,
+  "message": "Campaign deleted successfully"
+}
 ```
 
 ## Postman Collection

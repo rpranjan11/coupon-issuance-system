@@ -33,6 +33,7 @@ This system enables creating coupon campaigns with configurable parameters. Each
 ### 1. Clone the repository
 
 git clone https://github.com/rpranjan11/coupon-issuance-system.git
+
 cd coupon-issuance-system
 
 ### 2. Install the Protocol Buffer Compiler
@@ -47,11 +48,12 @@ apt-get install -y protobuf-compiler
 
 #### Windows
 
-Download the pre-built binary from [GitHub releases](https://github.com/protocolbuffers/protobuf/releases)
+Download from [GitHub releases](https://go.dev/doc/install)
 
 ### 3. Install Go Protocol Buffer plugins
 
 go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+
 go install github.com/bufbuild/connect-go/cmd/protoc-gen-connect-go@latest
 
 ### 4. Generate Protocol Buffer code
@@ -62,11 +64,13 @@ protoc --go_out=. --go_opt=paths=source_relative --connect-go_out=. --connect-go
 
 go mod tidy
 
-### 6. Build the server
+## Server
+
+### 1. Build the server
 
 go build -o server ./cmd/server
 
-### 7. Run the server
+### 2. Run the server
 
 ./server
 
@@ -206,6 +210,5 @@ go build -o loadtest ./test/load
 
 ## Postman Collection
 
-A Postman collection is provided in the `postman` directory. You can import it into Postman to test the API endpoints.
-### I have added a postman collection for testing the API endpoints. You can find it in the `postman` directory. The collection includes requests for creating campaigns, issuing coupons, and retrieving campaign information.
+A Postman collection is provided in the `postman` directory. You can import it into Postman to test the API endpoints. The collection includes requests for creating campaigns, issuing coupons, retrieving campaign information, and deleting campaign along with its all issued coupons.
 

@@ -1,0 +1,248 @@
+{
+	"info": {
+		"_postman_id": "4c2f4667-eb72-48b6-af1d-71dc04b9e6d9",
+		"name": "Coxwave Assignment - Coupon issuance system",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "7345953"
+	},
+	"item": [
+		{
+			"name": "CreateCampaign",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let json = pm.response.json();",
+							"",
+							"if (json && json.campaign && json.campaign.id && json.campaign.name && json.campaign.startTime) {",
+							"    let newEntry = {",
+							"        id: json.campaign.id,",
+							"        name: json.campaign.name,",
+							"        startTime: json.campaign.startTime",
+							"    };",
+							"",
+							"    // Get existing registry or initialize",
+							"    let existing = pm.collectionVariables.get(\"campaign_registry\");",
+							"    let registry = existing ? JSON.parse(existing) : [];",
+							"",
+							"    // Prevent duplicates",
+							"    if (!registry.some(entry => entry.id === newEntry.id)) {",
+							"        registry.push(newEntry);",
+							"        pm.collectionVariables.set(\"campaign_registry\", JSON.stringify(registry));",
+							"    }",
+							"",
+							"    // Store latest ID for reuse",
+							"    pm.collectionVariables.set(\"latest_campaign_id\", newEntry.id);",
+							"} else {",
+							"    console.warn(\"Response does not contain a valid campaign object. Registry not updated.\");",
+							"}",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Summer Sale 4\",\n    \"total_coupons\": 5,\n    \"start_time\": \"2025-05-11T05:19:00+09:00\"\n  }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/coupon.v1.CouponService/CreateCampaign",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"coupon.v1.CouponService",
+						"CreateCampaign"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetCampaign",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let registry = JSON.parse(pm.collectionVariables.get(\"campaign_registry\") || \"[]\");",
+							"",
+							"// Replace with the name you want to target",
+							"let targetName = \"Summer Sale 4\"; ",
+							"",
+							"let selected = registry.find(c => c.name === targetName);",
+							"",
+							"if (selected) {",
+							"    pm.collectionVariables.set(\"selected_campaign_id\", selected.id);",
+							"} else {",
+							"    console.warn(`Campaign with name '${targetName}' not found`);",
+							"}",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"campaign_id\": \"{{selected_campaign_id}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/coupon.v1.CouponService/GetCampaign",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"coupon.v1.CouponService",
+						"GetCampaign"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteCampaign",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let registry = JSON.parse(pm.collectionVariables.get(\"campaign_registry\") || \"[]\");",
+							"",
+							"// Replace with the name you want to target",
+							"let targetName = \"Summer Sale 2\"; ",
+							"",
+							"let selected = registry.find(c => c.name === targetName);",
+							"",
+							"if (selected) {",
+							"    pm.collectionVariables.set(\"selected_campaign_id\", selected.id);",
+							"} else {",
+							"    console.warn(`Campaign with name '${targetName}' not found`);",
+							"}",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"campaign_id\": \"{{selected_campaign_id}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/coupon.v1.CouponService/DeleteCampaign",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"coupon.v1.CouponService",
+						"DeleteCampaign"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "IssueCoupon",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"let registry = JSON.parse(pm.collectionVariables.get(\"campaign_registry\") || \"[]\");",
+							"",
+							"// Replace with the name you want to target",
+							"let targetName = \"Summer Sale 4\"; ",
+							"",
+							"let selected = registry.find(c => c.name === targetName);",
+							"",
+							"if (selected) {",
+							"    pm.collectionVariables.set(\"selected_campaign_id\", selected.id);",
+							"} else {",
+							"    console.warn(`Campaign with name '${targetName}' not found`);",
+							"}",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"campaign_id\": \"{{selected_campaign_id}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/coupon.v1.CouponService/IssueCoupon",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"coupon.v1.CouponService",
+						"IssueCoupon"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "campaign_registry",
+			"value": ""
+		},
+		{
+			"key": "latest_campaign_id",
+			"value": ""
+		},
+		{
+			"key": "selected_campaign_id",
+			"value": ""
+		}
+	]
+}

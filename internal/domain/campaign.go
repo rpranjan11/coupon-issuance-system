@@ -5,7 +5,6 @@ import (
 	"time"
 )
 
-// Campaign represents a coupon campaign
 type Campaign struct {
 	ID            string    `json:"id"`
 	Name          string    `json:"name"`

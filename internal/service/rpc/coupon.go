@@ -5,13 +5,10 @@ import (
 	"context"
 	"errors"
 
-	// Remove unused time import
-
 	"github.com/bufbuild/connect-go"
 	"google.golang.org/protobuf/types/known/timestamppb"
 
 	coupon "github.com/rpranjan11/coupon-issuance-system/api/coupon"
-	// "github.com/rpranjan11/coupon-issuance-system/internal/domain" - remove if unused
 	"github.com/rpranjan11/coupon-issuance-system/internal/service"
 )
 

@@ -7,7 +7,6 @@ option go_package = "github.com/rpranjan11/coupon-issuance-system/api/coupon;cou
 
 import "google/protobuf/timestamp.proto";
 
-// CouponService provides methods to manage coupon campaigns and issue coupons
 service CouponService {
   // CreateCampaign creates a new coupon campaign
   rpc CreateCampaign(CreateCampaignRequest) returns (CreateCampaignResponse) {}

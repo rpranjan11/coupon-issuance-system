@@ -5,7 +5,6 @@ import (
 	"time"
 )
 
-// Coupon represents an issued coupon
 type Coupon struct {
 	Code       string    `json:"code"`
 	CampaignID string    `json:"campaign_id"`

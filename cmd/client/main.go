@@ -18,7 +18,6 @@ import (
 )
 
 func main() {
-	// Parse command-line flags
 	serverAddr := flag.String("server", "http://localhost:8080", "server address")
 	command := flag.String("command", "issue", "command to run: create, get, issue, or delete")
 	campaignID := flag.String("campaign", "", "campaign ID for get, issue, and delete commands")

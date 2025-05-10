@@ -73,7 +73,7 @@ go build -o server ./cmd/server
 ```json
 {
   "name": "string",
-  "start_time": "2025-05-11T00:00:00Z",
+  "start_time": "2025-05-11T00:00:00+09:00",
   "coupon_count": 100
 }
 ```
@@ -84,8 +84,8 @@ go build -o server ./cmd/server
   "id": "string",
   "name": "string",
   "totalCoupons": 100,
-  "startTime": "2025-05-11T00:00:00Z",
-  "createdAt": "2025-05-11T16:23:13.093881Z"
+  "startTime": "2025-05-11T00:00:00+09:00",
+  "createdAt": "2025-05-11T16:23:13.093881+09:00"
 }
 ```
 
@@ -105,7 +105,7 @@ go build -o server ./cmd/server
   "coupon": {
     "code": "string",
     "campaignId": "string",
-    "issuedAt": "2025-05-10T16:25:07.607675Z"
+    "issuedAt": "2025-05-10T16:25:07.607675+09:00"
   }
 }
 ```
@@ -127,14 +127,14 @@ go build -o server ./cmd/server
     "name": "string",
     "totalCoupons": 100,
     "issuedCoupons": 1,
-    "startTime": "2025-05-10T00:00:00Z",
-    "createdAt": "2025-05-10T16:23:56.405350Z"
+    "startTime": "2025-05-10T00:00:00+09:00",
+    "createdAt": "2025-05-10T16:23:56.405350+09:00"
   },
   "coupons": [
     {
       "code": "string",
       "campaignId": "string",
-      "issuedAt": "2025-05-10T16:25:07.607675Z"
+      "issuedAt": "2025-05-10T16:25:07.607675+09:00"
     }
   ]
 }

@@ -43,6 +43,9 @@ func (s *CouponServiceServer) CreateCampaign(
 		if errors.Is(err, service.ErrDuplicateCampaign) {
 			return nil, connect.NewError(connect.CodeAlreadyExists,
 				errors.New("a campaign with this name already exists"))
+		} else if errors.Is(err, service.ErrPastStartTime) {
+			return nil, connect.NewError(connect.CodeInvalidArgument,
+				errors.New("campaign start time cannot be in the past"))
 		}
 		return nil, connect.NewError(connect.CodeInternal, err)
 	}

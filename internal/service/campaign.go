@@ -18,6 +18,7 @@ var (
 	ErrCampaignNotStarted = errors.New("campaign has not started yet")
 	ErrNoMoreCoupons      = errors.New("no more coupons available")
 	ErrDuplicateCampaign  = errors.New("a campaign with this name already exists")
+	ErrPastStartTime      = errors.New("campaign start time cannot be in the past")
 )
 
 // CampaignService handles campaign-related business logic
@@ -39,6 +40,11 @@ func (s *CampaignService) CreateCampaign(ctx context.Context, name string, total
 	// Validate input
 	if name == "" || totalCoupons <= 0 {
 		return nil, ErrInvalidRequest
+	}
+
+	// Check if start time is in the past
+	if startTime.Before(time.Now()) {
+		return nil, ErrPastStartTime
 	}
 
 	// Check if a campaign with the same name already exists

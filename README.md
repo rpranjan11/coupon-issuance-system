@@ -21,7 +21,7 @@ This system enables creating coupon campaigns with configurable parameters. Each
 - Edge Case Handling: The system includes checks to prevent issuing more coupons than available, ensuring that the number of issued coupons does not exceed the total number of coupons in a campaign.
 - Error Handling: The system provides clear error messages for invalid requests, such as missing fields or invalid campaign IDs, making it easier to debug and resolve issues.
 - Postman Collection: A Postman collection is included for easy testing of the API endpoints, allowing developers to quickly test and validate the functionality of the system.
-- Testing Tools for Concurrency: The system includes testing tools to simulate high traffic and concurrent requests, allowing developers to test the performance and reliability of the system under load.
+- Testing Scripts for Concurrency: The system includes testing tools to simulate high traffic and concurrent requests, allowing developers to test the performance and reliability of the system under load.
 
 ## Prerequisites
 
@@ -69,6 +69,31 @@ go build -o server ./cmd/server
 ### 7. Run the server
 
 ./server
+
+## Client
+
+The client is a command-line tool for interacting with the coupon issuance system. It allows you to create campaigns, issue coupons, and retrieve campaign information.
+
+### 1. Build the client
+
+go build -o client ./cmd/client
+
+### 2. Run the client
+
+./client -command=create -name="Test Campaign" -total=100 -start-in=30s
+
+### 3. Issue a coupon
+
+./client -command=issue -campaign-id=<CAMPAIGN_ID>
+
+### 4. Get campaign details
+
+./client -command=get -campaign-id=<CAMPAIGN_ID>
+
+### 5. Delete a campaign
+
+./client -command=delete -campaign-id=<CAMPAIGN_ID>
+
 
 ## Load Testing
 

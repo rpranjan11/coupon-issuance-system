@@ -1,0 +1,86 @@
+// api/coupon/coupon.proto
+syntax = "proto3";
+
+package coupon.v1;
+
+option go_package = "github.com/rpranjan11/coupon-issuance-system/api/coupon;coupon";
+
+import "google/protobuf/timestamp.proto";
+
+service CouponService {
+  // CreateCampaign creates a new coupon campaign
+  rpc CreateCampaign(CreateCampaignRequest) returns (CreateCampaignResponse) {}
+
+  // GetCampaign gets campaign information including all issued coupon codes
+  rpc GetCampaign(GetCampaignRequest) returns (GetCampaignResponse) {}
+
+  // IssueCoupon requests coupon issuance on a specific campaign
+  rpc IssueCoupon(IssueCouponRequest) returns (IssueCouponResponse) {}
+
+  // DeleteCampaign deletes a campaign by ID or name
+  rpc DeleteCampaign(DeleteCampaignRequest) returns (DeleteCampaignResponse) {}
+}
+
+// Campaign represents a coupon campaign
+message Campaign {
+  string id = 1;
+  string name = 2;
+  int32 total_coupons = 3;
+  int32 issued_coupons = 4;
+  google.protobuf.Timestamp start_time = 5;
+  google.protobuf.Timestamp created_at = 6;
+}
+
+// Coupon represents an issued coupon
+message Coupon {
+  string code = 1;
+  string campaign_id = 2;
+  google.protobuf.Timestamp issued_at = 3;
+}
+
+// CreateCampaignRequest is the request for creating a new campaign
+message CreateCampaignRequest {
+  string name = 1;
+  int32 total_coupons = 2;
+  google.protobuf.Timestamp start_time = 3;
+}
+
+// CreateCampaignResponse is the response for creating a new campaign
+message CreateCampaignResponse {
+  Campaign campaign = 1;
+}
+
+// GetCampaignRequest is the request for getting campaign information
+message GetCampaignRequest {
+  string campaign_id = 1;
+}
+
+// GetCampaignResponse is the response for getting campaign information
+message GetCampaignResponse {
+  Campaign campaign = 1;
+  repeated Coupon coupons = 2;
+}
+
+// IssueCouponRequest is the request for issuing a coupon
+message IssueCouponRequest {
+  string campaign_id = 1;
+}
+
+// IssueCouponResponse is the response for issuing a coupon
+message IssueCouponResponse {
+  bool success = 1;
+  Coupon coupon = 2;
+  string error = 3;
+}
+
+// DeleteCampaignRequest is the request for deleting a campaign
+message DeleteCampaignRequest {
+  string campaign_id = 1;
+  string campaign_name = 2;
+}
+
+// DeleteCampaignResponse is the response for deleting a campaign
+message DeleteCampaignResponse {
+  bool success = 1;
+  string message = 2;
+}

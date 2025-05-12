@@ -32,9 +32,11 @@ This system enables creating coupon campaigns with configurable parameters. Each
 
 ### 1. Clone the repository
 
+```bash
 git clone https://github.com/rpranjan11/coupon-issuance-system.git
 
 cd coupon-issuance-system
+```
 
 ### 2. Install the Protocol Buffer Compiler
 

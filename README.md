@@ -194,7 +194,7 @@ go build -o loadtest ./test/load
 ```
 
 ### 3. Get Campaign Details
-- **Endpoint**: `/GetCampaign/`
+- **Endpoint**: `/GetCampaign`
 - **Method**: `POST`
 - **Request Body**:
 ```json

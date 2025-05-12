@@ -100,7 +100,7 @@ The client is a command-line tool for interacting with the coupon issuance syste
 go build -o client ./cmd/client
 ```
 
-### 2. Run the client
+### 2. Create a campaign
 
 ```bash
 ./client -command=create -name="Test Campaign" -total=100 -start-in=30s
@@ -118,7 +118,7 @@ go build -o client ./cmd/client
 ./client -command=get -campaign-id=<CAMPAIGN_ID>
 ```
 
-### 5. Delete a campaign
+### 5. Delete a campaign and all issued coupons
 
 ```bash
 ./client -command=delete -campaign-id=<CAMPAIGN_ID>
@@ -128,20 +128,20 @@ go build -o client ./cmd/client
 
 To test the performance of the system under high traffic, you can use the `/test/load/main.go` file. This file contains a simple load testing implementation that simulates multiple concurrent requests to the API endpoints.
 
-### 1. Build the testing tool:
+### 1. Build the testing tool
 
 ```bash
 go build -o loadtest ./test/load
 ```
 
-### 2. Run to create a test campaign:
+### 2. Run to create a load testing campaign 
 
 ```bash
 ./client -command=create -name="Load Test Campaign" -total=1000 -start-in=30s
 ```
 #### Note the campaign ID from the output.
 
-### 3. Run the load test:
+### 3. Run the load test
 
 ```bash
 ./loadtest -campaign-id=<CAMPAIGN_ID> -concurrency=50 -rate=500 -duration=10s
@@ -223,7 +223,7 @@ go build -o loadtest ./test/load
 }
 ```
 
-### 4. Delete Campaign
+### 4. Delete Campaign and all issued coupons
 - **Endpoint**: `/DeleteCampaign`
 - **Method**: `POST`
 - **Request Body**:

@@ -42,11 +42,15 @@ cd coupon-issuance-system
 
 #### macOS (using Homebrew)
 
+```bash
 brew install protobuf
+```
 
 #### Linux
 
+```bash
 apt-get install -y protobuf-compiler
+```
 
 #### Windows
 
@@ -54,27 +58,37 @@ Download from [GitHub releases](https://go.dev/doc/install)
 
 ### 3. Install Go Protocol Buffer plugins
 
+```bash
 go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
 
 go install github.com/bufbuild/connect-go/cmd/protoc-gen-connect-go@latest
+```
 
 ### 4. Generate Protocol Buffer code
 
+```bash
 protoc --go_out=. --go_opt=paths=source_relative --connect-go_out=. --connect-go_opt=paths=source_relative coupon.proto
+```
 
 ### 5. Install dependencies
 
+```bash
 go mod tidy
+```
 
 ## Server
 
 ### 1. Build the server
 
+```bash
 go build -o server ./cmd/server
+```
 
 ### 2. Run the server
 
+```bash
 ./server
+```
 
 ## Client
 
@@ -82,24 +96,33 @@ The client is a command-line tool for interacting with the coupon issuance syste
 
 ### 1. Build the client
 
+```bash
 go build -o client ./cmd/client
+```
 
 ### 2. Run the client
 
+```bash
 ./client -command=create -name="Test Campaign" -total=100 -start-in=30s
+```
 
 ### 3. Issue a coupon
 
+```bash
 ./client -command=issue -campaign-id=<CAMPAIGN_ID>
+```
 
 ### 4. Get campaign details
 
+```bash
 ./client -command=get -campaign-id=<CAMPAIGN_ID>
+```
 
 ### 5. Delete a campaign
 
+```bash
 ./client -command=delete -campaign-id=<CAMPAIGN_ID>
-
+```
 
 ## Load Testing
 
@@ -107,15 +130,22 @@ To test the performance of the system under high traffic, you can use the `/test
 
 ### 1. Build the testing tool:
 
+```bash
 go build -o loadtest ./test/load
+```
 
 ### 2. Run to create a test campaign:
 
+```bash
 ./client -command=create -name="Load Test Campaign" -total=1000 -start-in=30s
+```
 #### Note the campaign ID from the output.
 
 ### 3. Run the load test:
+
+```bash
 ./loadtest -campaign-id=<CAMPAIGN_ID> -concurrency=50 -rate=500 -duration=10s
+```
 
 
 ## API Endpoints
